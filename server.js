@@ -10,23 +10,22 @@ const PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+var exphbs = require("express-handlebars");
+
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 // set up our routes
-app.get('/', function(req, res) {
-  // send home.html when user hits "root"
-  res.sendFile(path.join(__dirname, './html/home.html'));
+app.get("/", function(req, res) {
+  connection.query("SELECT * FROM plans;", function(err, data) {
+    if (err) {
+      return res.status(500).end();
+    }
+
+    res.render("index", { plans: data });
+  });
 });
 
-app.get('/tables', function(req, res) {
-  // send tables.html when user hits "/tables"
-  res.sendFile(path.join(__dirname, './html/tables.html'));
-});
-
-app.get('/add', function(req, res) {
-  // send add.html when user hits "/add"
-  res.sendFile(path.join(__dirname, './html/add.html'));
-});
-
-// API ROUTES
 
 // GET all tables
 app.get('/api/tables', function(req, res) {
