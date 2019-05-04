@@ -1,0 +1,133 @@
+<div class="jumbotron">
+  <h1>Note Taker</h1>
+</div>
+
+
+
+<div class="container-fluid m-5">
+  <div class="row">
+
+    <div class="col-2 m-1">
+      <h2>Add a Note</h2>
+
+      <form id="addNote" class="button-size">
+
+        <div class="form-group">
+          <label for="noteTitleArea">Note Title</label>
+          <input type="text" class="form-control" name="noteTitle" id="noteTitleArea">
+        </div>
+
+        <div class="form-group">
+          <label for="noteContent">Note Content</label>
+          <textarea class="form-control" name="note" id="noteContent" rows="3"></textarea>
+
+        </div>
+
+        <button class="btn btn-primary" type="submit">Save Note!</button>
+
+      </form>
+
+    </div>
+
+    <div class="container col-9">
+
+      <div class="row">
+
+        {{#each notes}}
+
+        <div class="card col-3 m-1">
+
+          <div class="card-body">
+
+            <h4 class="card-title">{{this.title}}</h4>
+
+            <p class="card-text">{{this.content}}</p>
+
+            <button data-planid="{{this.id}}" class="delplan btn btn-danger">Delete Note!</button>
+
+          </div>
+
+        </div>
+
+        {{/each}}
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script type="text/javascript">
+  $(".delplan").on("click", function (event)
+  {
+    // Get the ID from the button.
+    // This is shorthand for $(this).attr("data-planid")
+    var id = $(this).data("planid");
+
+    // Send the DELETE request.
+    $.ajax("/todos/" + id, {
+      type: "DELETE"
+    }).then(
+      function ()
+      {
+        console.log("deleted id ", id);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+
+  $("#addNote").on("submit", function (event)//adding a new note to db
+  {
+
+    event.preventDefault();
+
+
+    var newNote = {
+      noteTitle: $("#addNote [name=noteTitle]").val().trim(),
+      note: $("#addNote [name=note]").val().trim()
+    };
+
+
+    $.ajax("/api/notes", {
+      type: "POST",
+      data: newNote
+    }).then(
+      function ()
+      {
+        console.log("created new note");
+
+        location.reload();
+      }
+    );
+  });
+
+  $("#updateplan").on("submit", function (event)
+  {
+    // Make sure to preventDefault on a submit event.
+    event.preventDefault();
+
+    // Get the ID by finding an element with a "name" attribute equal to the string "id"
+    var id = $("[name=id]").val().trim();
+
+    var updatedPlan = {
+      plan: $("#updateplan [name=plan]").val().trim()
+    };
+
+    // Send the PUT request.
+    $.ajax("/todos/" + id, {
+      type: "PUT",
+      data: updatedPlan
+    }).then(
+      function ()
+      {
+        console.log("updated id ", id);
+        // Reload the page to get the updated list
+        location.reload();
+      }
+    );
+  });
+</script>
