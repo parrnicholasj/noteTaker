@@ -52,25 +52,25 @@ app.post("/api/notes", function (req, res)
 })
 
 
-// app.delete("/api/notes/:id", function(req, res) {
-//   connection.query("DELETE FROM plans WHERE id = ?", [req.params.id], function(err, result) {
-//     if (err) {
-//       console.log(err0l);
-//       return res.status(500).end();
-//     }
-//     else if (result.affectedRows === 0) {
-//       // If no rows were changed, then the ID must not exist, so 404
-//       return res.status(404).end();
-//     }
-//     res.status(200).end();
+app.delete("/api/notes/:id", function(req, res) {
+  connection.query("DELETE FROM notes WHERE id = ?", [req.params.id], function(err, result) {
+    if (err) {
+      console.log(err0l);
+      return res.status(500).end();
+    }
+    else if (result.affectedRows === 0) {
+      // If no rows were changed, then the ID must not exist, so 404
+      return res.status(404).end();
+    }
+    res.status(200).end();
 
-//   });
-// });
+  });
+});
 
 
 app.get('*', function (req, res)
 {
-  res.send('<h1>💁‍♀️ 404 Error!</h1>');
+  res.send('<h1>404 Error!</h1>');
 });
 
 // turn on server, make sure this is last in the file

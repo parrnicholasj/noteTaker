@@ -43,7 +43,7 @@
 
             <p class="card-text">{{this.content}}</p>
 
-            <button data-planid="{{this.id}}" class="delplan btn btn-danger">Delete Note!</button>
+            <button data-noteid="{{this.id}}" class="delNote btn btn-danger">Delete Note!</button>
 
           </div>
 
@@ -61,20 +61,19 @@
 
 
 <script type="text/javascript">
-  $(".delplan").on("click", function (event)
+  $(".delNote").on("click", function (event)//deleting a note
   {
-    // Get the ID from the button.
-    // This is shorthand for $(this).attr("data-planid")
-    var id = $(this).data("planid");
+    
+    var id = $(this).data("noteid");
 
-    // Send the DELETE request.
-    $.ajax("/todos/" + id, {
+   
+    $.ajax("/api/notes/" + id, {
       type: "DELETE"
     }).then(
       function ()
       {
         console.log("deleted id ", id);
-        // Reload the page to get the updated list
+        
         location.reload();
       }
     );
